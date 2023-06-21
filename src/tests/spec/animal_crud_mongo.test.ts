@@ -1,12 +1,9 @@
 import {expect, request} from "../setup/baseApiTest";
-
+import { Dog } from "../../orm/types";
+const {describe, it} = require('mocha');
 process.env.DB_TYPE = "mongodb"
 
-
 import {createApp,terminate} from "../../app";
-
-const {describe, it} = require('mocha');
-import {AnimalInput, Dog} from "../../orm/types";
 
 
 
