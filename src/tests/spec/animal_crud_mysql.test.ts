@@ -47,7 +47,9 @@ describe('CRUD Animal Test with MySQL',  function () {
         expect(response.body.error).toBeFalsy();
 
         const createdDog: Dog = response.body.data
-        console.log(createdDog);
+        expect(createdDog.name).toBe("Rex");
+        expect(createdDog.age).toBe("2");
+        expect(createdDog.color).toBe("Brown");
     });
 
     it('Should update the new dog created from db', async () => {
