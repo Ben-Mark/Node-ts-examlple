@@ -1,5 +1,4 @@
 import { Router} from "express";
-import healthCheck from "./endpoints/healthcheck";
 import createAnimal from './endpoints/create';
 import readAnimal from './endpoints/read';
 import updateAnimal from './endpoints/update';
