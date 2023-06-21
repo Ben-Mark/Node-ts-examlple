@@ -1,15 +1,11 @@
 {
   "name": "animality",
   "version": "1.0.0",
-  "description": "opencicd budget service",
+  "description": "animal service",
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
     "tests": "NODE_ENV=dev NODE_NO_WARNINGS=1 LOG_LEVEL=info mocha --config=src/tests/setup/.mocharc.json",
-    "local-dependencies": "npm-run-all --parallel port-forward-mongodb port-forward-mongo-express port-forward-update-server",
-    "port-forward-mongodb": "kubectl port-forward service/develeforce-mdb-service 27017:27017 -n tekton-pipelines",
-    "port-forward-update-server": "kubectl port-forward service/develeforce-update-server 8443:443 -n develeforce-infra",
-    "port-forward-mongo-express": "kubectl port-forward service/mongo-express-service 8081:8081 -n tekton-pipelines",
     "start-local": "NODE_ENV=dev ts-node-dev src/app.ts",
     "build": "tsc"
   },
