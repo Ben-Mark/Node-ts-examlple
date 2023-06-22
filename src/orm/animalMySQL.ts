@@ -21,10 +21,12 @@ class AnimalMySQL implements IAnimalDB{
             const dbUrl = url.parse(process.env.MYSQL_DB_URI || 'MISSING MYSQL_DB_URI env variable, contact Animal support');
             const [username, password] = (dbUrl.auth || '').split(':');
 
+            const dbName = dbUrl.pathname?.substring(1) || '';
+
             this.connection = await mysql.createConnection({
                 host: dbUrl.hostname || 'MISSING MYSQL_DB_URI env variable, contact Animal support',
                 user: username || 'user',
-                database: (dbUrl.pathname || '').substr(1), // Remove leading "/"
+                database: dbName, // Remove leading "/"
                 password: password || 'password',
             });
         }

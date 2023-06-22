@@ -4,30 +4,33 @@ import {
     SearchOptions, UpdateOptions,
 } from "./types";
 import {IAnimalDB} from "./iAnimalDB";
+import url from "url";
 
 const {MongoClient} = require('mongodb')
 
 
 class AnimalMongoDB implements IAnimalDB{
 
-    dbUri: string
-    dbName: string
-    dogsColName: string
+    dogsColName: string = "dogs-col"
     client: any
     db: any
 
-    constructor() {
-        this.dbName = process.env["DB_PERMIMETER"] || "Error, missing DB NAME, Call animal support"
-        this.dogsColName = "dogs-col"
-        this.dbUri = process.env["MONGO_DB_URI"] || "Error, missing DB URI, Call animal support"
-    }
+    // constructor() {
+    //     this.dbName = process.env["DB_PERMIMETER"] || "Error, missing DB NAME, Call animal support"
+    //     this.dogsColName = "dogs-col"
+    //     this.dbUri = process.env["MONGO_DB_URI"] || "Error, missing DB URI, Call animal support"
+    // }
 
     initDB = async () => {
         try{
-            this.client = await MongoClient.connect(this.dbUri, {useNewUrlParser: true});
-            this.db = this.client.db(this.dbName);
+            const dbUrl = url.parse(process.env.MONGO_DB_URI || 'MISSING MONGO_DB_URI env variable, contact Animal support');
+            const dbName = dbUrl.pathname?.substring(1) || '';
+            this.client = await MongoClient.connect(dbUrl.hostname, {useNewUrlParser: true});
+            this.db = this.client.db(dbName);
+
             await this.getOrCreateCollection(this.dogsColName);
-            console.log(`${this.dbName} DB initialized`);
+
+            console.log(`${dbName} DB initialized`);
         }catch(e){
             console.error(e.message)
             throw new Error(e)

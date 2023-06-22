@@ -22,7 +22,7 @@ export class DBFactory {
 
     static createDB(): IAnimalDB {
 
-        const DB_TYPE: string = process.env.DB_TYPE || "MISSING ENV VARIABLE DB_TYPE";
+        const DB_TYPE: string = process.env.DB_TYPE || process.env.DEFAULT_DB_TYPE || "Missing DEFAULT_DB_TYPE env variable, contact animal support";
 
         if (!this.supportedDBTypes.includes(DB_TYPE as DBType)) {
             throw new Error(`Invalid DB_TYPE: ${DB_TYPE}`);
