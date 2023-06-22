@@ -40,4 +40,21 @@ export type UpdateOptions = {
 }
 
 
+export type DBErrorStatus = {
+    error: boolean,
+    errorMessage?: string
+}
 
+export type CreateDBResponse = DBErrorStatus
+
+export type ReadDBResponse = {
+    animal?: Animal
+} & DBErrorStatus
+
+export type UpdateDBResponse = DBErrorStatus
+
+export type DeleteDBResponse = DBErrorStatus
+
+export type SearchDBResponse = {
+    animals?: Animal[]
+} & DBErrorStatus

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import {ErrorResponse, SuccessEmptyResponse} from "../types";
-import {Animal} from "../../../orm/types";
+import {Animal, DBErrorStatus, ReadDBResponse} from "../../../orm/types";
 
 
 
@@ -28,15 +28,15 @@ export default async (req: ReadRequest, res: ReadResponse) => {
 
         const {id}:{ id: string } = body
 
-        const {error, animal } = await animalDB.readAnimalDoc(id)
+        const readDbResponse:ReadDBResponse = await animalDB.readAnimalDoc(id)
 
-        if(error){
-            throw new Error(error)
+        if(readDbResponse.error){
+            throw new Error(readDbResponse.errorMessage)
         }
 
         res.status(200).send({
             error: false,
-            data: animal
+            data: readDbResponse.animal
         })
 
     } catch (e){

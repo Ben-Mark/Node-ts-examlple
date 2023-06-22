@@ -1,4 +1,13 @@
-import {Animal, Dog, SearchOptions, UpdateOptions} from "./types";
+import {
+    Animal, CreateDBResponse,
+    DBErrorStatus, DeleteDBResponse,
+    Dog,
+    ReadDBResponse,
+    SearchDBResponse,
+    SearchOptions,
+    UpdateDBResponse,
+    UpdateOptions
+} from "./types";
 import mysql from 'mysql2/promise';
 import {IAnimalDB} from "./iAnimalDB";
 import url from 'url';
@@ -46,7 +55,7 @@ class AnimalMySQL implements IAnimalDB{
         await this.connection.execute(createTableSql);
     }
 
-    async createAnimalDoc(animal: Animal): Promise<{ error: boolean | string }> {
+    async createAnimalDoc(animal: Animal): Promise<CreateDBResponse> {
         try {
             const { id, name, age, color } = animal;
             const query = `
@@ -63,34 +72,14 @@ class AnimalMySQL implements IAnimalDB{
             return { error: false }
         } catch (e) {
             return {
-                error: e.message,
+                error: true,
+                errorMessage:  e.message,
             }
         }
     }
 
-    async deleteAnimalDoc(id: string): Promise<{ error: boolean | string }> {
-        try {
-            await this.connect();
 
-            const [rows] = await this.connection.execute(
-                `DELETE FROM ${dogsTableName} WHERE id = ?`,
-                [id]
-            );
-
-            if (rows.affectedRows === 0) {
-                return { error: 'Document not found' }
-            }
-
-            return { error: false }
-
-        } catch (e) {
-            return {
-                error: e.message,
-            }
-        }
-    }
-
-    async readAnimalDoc(id: string): Promise<{ animal?: Animal, error: boolean | string }> {
+    async readAnimalDoc(id: string): Promise<ReadDBResponse> {
         try {
 
             const [rows]: any = await this.connection.execute(
@@ -99,7 +88,10 @@ class AnimalMySQL implements IAnimalDB{
             );
 
             if (rows.length === 0) {
-                return { error: `Animal document by id: ${id} couldnt be found` }
+                return {
+                    error: true,
+                    errorMessage:  `Animal document by id: ${id} couldnt be found`
+                }
             }
 
             return {
@@ -109,18 +101,20 @@ class AnimalMySQL implements IAnimalDB{
 
         } catch (e) {
             return {
-                error: e.message,
+                error: true,
+                errorMessage:  e.message,
             }
         }
     }
 
-    async updateAnimalDoc(updateOptions: UpdateOptions): Promise<{ error: boolean | string }> {
+    async updateAnimalDoc(updateOptions: UpdateOptions): Promise<UpdateDBResponse> {
         try {
 
             const {animal, error:dogReadError} = await this.readAnimalDoc(updateOptions.id)
             if(dogReadError){
                 return {
-                    error: `failed to find dog by id: ${updateOptions.id} to perform update`
+                    error: true,
+                    errorMessage:  `failed to find dog by id: ${updateOptions.id} to perform update`
                 }
             }
 
@@ -137,12 +131,39 @@ class AnimalMySQL implements IAnimalDB{
 
         } catch (e) {
             return {
-                error: e.message,
+                error: true,
+                errorMessage:  e.message,
             }
         }
     }
 
-    async searchAnimalDoc(searchOptions: SearchOptions): Promise<{ animals?: Animal[], error: boolean | string }> {
+    async deleteAnimalDoc(id: string): Promise<DeleteDBResponse> {
+        try {
+            await this.connect();
+
+            const [rows] = await this.connection.execute(
+                `DELETE FROM ${dogsTableName} WHERE id = ?`,
+                [id]
+            );
+
+            if (rows.affectedRows === 0) {
+                return {
+                    error: true,
+                    errorMessage:  'Document not found'
+                }
+            }
+
+            return { error: false }
+
+        } catch (e) {
+            return {
+                error: true,
+                errorMessage:  e.message,
+            }
+        }
+    }
+
+    async searchAnimalDoc(searchOptions: SearchOptions): Promise<SearchDBResponse> {
         try {
             const {params, whereClause, orderBy} = getSearchQuery(searchOptions)
 
@@ -152,7 +173,10 @@ class AnimalMySQL implements IAnimalDB{
             );
 
             if (!rows) {
-                return { error: 'Dogs search error' }
+                return {
+                    error: true,
+                    errorMessage:  'Dogs search error'
+                }
             }
 
             return {
@@ -162,7 +186,8 @@ class AnimalMySQL implements IAnimalDB{
 
         } catch (e) {
             return {
-                error: e.message,
+                error: true,
+                errorMessage:  e.message,
             }
         }
     }

@@ -13,3 +13,5 @@ export type SuccessIdResponse = {
 export type SuccessEmptyResponse = {
     error: false,
 };
+
+

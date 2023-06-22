@@ -1,4 +1,4 @@
-import {Animal, SearchOptions} from "../../../orm/types";
+import {Animal, DBErrorStatus, SearchDBResponse, SearchOptions} from "../../../orm/types";
 import { Request, Response } from 'express';
 import {ErrorResponse, SuccessEmptyResponse} from "../types";
 
@@ -27,15 +27,15 @@ export default async (req: SearchRequest, res: SearchResponse) => {
 
         let searchOptions: SearchOptions = body
 
-        const { error, animals } = await animalDB.searchAnimalDoc(searchOptions)
+        const searchDBResponse: SearchDBResponse = await animalDB.searchAnimalDoc(searchOptions)
 
-        if(error){
-            throw new Error(error)
+        if(searchDBResponse.error){
+            throw new Error(searchDBResponse.errorMessage)
         }
 
         res.status(200).send({
             error: false,
-            data: animals
+            data: searchDBResponse.animals
         })
 
     } catch (e){

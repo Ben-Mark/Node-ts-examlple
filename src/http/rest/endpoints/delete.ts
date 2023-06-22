@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import {ErrorResponse, SuccessEmptyResponse} from "../types";
+import {DBErrorStatus, DeleteDBResponse} from "../../../orm/types";
 
 
 
@@ -24,10 +25,10 @@ export default async (req: DeleteRequest, res: DeleteResponse) => {
 
         const {id}:{ id: string } = body
 
-        const {error } = await animalDB.deleteAnimalDoc(id)
+        const deleteDBResponse: DeleteDBResponse = await animalDB.deleteAnimalDoc(id)
 
-        if(error){
-            throw new Error(error)
+        if(deleteDBResponse.error){
+            throw new Error(deleteDBResponse.errorMessage)
         }
 
         res.status(200).send({
