@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-//    "target": "ES2018",
     "target": "es6",
     "module": "commonjs",
     "strict": true,
@@ -17,10 +16,6 @@
     "declaration": true,
     "noEmitOnError": true,
     "stripInternal": true,
-      // 👇️ ... rest
-
-    // enable this rule:
-//    "noImplicitAny": false
   },
   "include": ["src",
     "src/tests"
