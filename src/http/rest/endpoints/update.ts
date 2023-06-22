@@ -3,14 +3,14 @@ import { Request, Response } from 'express';
 import {ErrorResponse, SuccessEmptyResponse} from "../types";
 
 
-interface UpdateResponse extends Response {
-    json(data: SuccessEmptyResponse | ErrorResponse): this;
-}
 
 interface UpdateRequest extends Request {
     body: UpdateOptions;
 }
 
+interface UpdateResponse extends Response {
+    json(data: SuccessEmptyResponse | ErrorResponse): this;
+}
 
 export default async (req: UpdateRequest, res: UpdateResponse) => {
 

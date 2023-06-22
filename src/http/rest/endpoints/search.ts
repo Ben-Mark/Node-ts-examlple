@@ -3,16 +3,16 @@ import { Request, Response } from 'express';
 import {ErrorResponse, SuccessEmptyResponse} from "../types";
 
 
+interface SearchRequest extends Request {
+    body: SearchOptions;
+}
+
 type SuccessResponse = SuccessEmptyResponse & {
     data: Animal[]
 };
 
 interface SearchResponse extends Response {
     json(data: SuccessResponse | ErrorResponse): this;
-}
-
-interface SearchRequest extends Request {
-    body: SearchOptions;
 }
 
 

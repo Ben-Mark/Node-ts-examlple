@@ -4,13 +4,16 @@ import { Request, Response } from 'express';
 import {ErrorResponse, SuccessIdResponse} from "../types";
 
 
-interface CreateResponse extends Response {
-    json(data: SuccessIdResponse | ErrorResponse): this;
-}
 
 interface CreateRequest extends Request {
     body: AnimalInput;
 }
+
+
+interface CreateResponse extends Response {
+    json(data: SuccessIdResponse | ErrorResponse): this;
+}
+
 
 export default async (req: CreateRequest, res: CreateResponse) => {
 

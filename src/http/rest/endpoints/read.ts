@@ -3,6 +3,11 @@ import {ErrorResponse, SuccessEmptyResponse} from "../types";
 import {Animal} from "../../../orm/types";
 
 
+
+interface ReadRequest extends Request {
+    body: { id: string };
+}
+
 type SuccessResponse = SuccessEmptyResponse & {
     data: Animal
 };
@@ -10,11 +15,6 @@ type SuccessResponse = SuccessEmptyResponse & {
 interface ReadResponse extends Response {
     json(data: SuccessResponse | ErrorResponse): this;
 }
-
-interface ReadRequest extends Request {
-    body: { id: string };
-}
-
 
 
 export default async (req: ReadRequest, res: ReadResponse) => {
