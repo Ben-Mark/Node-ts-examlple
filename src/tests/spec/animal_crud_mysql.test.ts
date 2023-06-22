@@ -3,7 +3,7 @@ import {Animal, Dog} from "../../orm/types";
 const {describe, it} = require('mocha');
 process.env.DB_TYPE = "mysql"
 
-import {createApp,terminate} from "../../app";
+import {createApp} from "../../app";
 
 
 
@@ -16,7 +16,7 @@ describe('CRUD Animal Test with MySQL',  function () {
     let app: any
 
     it('Should wait until server is up', async () => {
-        app = await createApp()
+        app = await createApp(3008)
     })
 
     it('Should create a new dog', async () => {
@@ -119,10 +119,6 @@ describe('CRUD Animal Test with MySQL',  function () {
 
     });
 
-
-    after(() => {
-        terminate()
-    });
 
 
 })

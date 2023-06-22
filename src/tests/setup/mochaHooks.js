@@ -4,7 +4,7 @@ const propertiesReader = require('properties-reader')
 const axios = require("axios");
 const failures = []
 const successes = []
-
+import {terminate} from "../../app";
 
 
 
@@ -52,7 +52,6 @@ exports.mochaHooks = {
         }catch(e){
             console.log("failed to write ./test-results.properties");
         }
-
 
         // process.exit(0)
     }

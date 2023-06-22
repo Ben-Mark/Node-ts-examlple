@@ -5,24 +5,6 @@
 process.env.NODE_ENV='dev'
 process.env.SYSTEM_UNDER_TEST = 'true';
 const request = require('supertest');
-// const restClient = require('node-rest-client-promise');
-// const nodeClientOptions = {
-//     connection: {
-//         rejectUnauthorized: false,
-//     },
-//     requestConfig: {
-//         timeout: 60000,
-//         noDelay: true,
-//         keepAlive: true,
-//         keepAliveDelay: 1000,
-//     },
-//     responseConfig: {
-//         timeout: 300000,
-//     },
-// };
-
-
-// import app,{terminate} from '../../app'
 
 import expect from 'expect'
 
