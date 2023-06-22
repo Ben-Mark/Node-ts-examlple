@@ -1,7 +1,22 @@
-import { SearchOptions} from "../../../orm/types";
+import {Animal, SearchOptions} from "../../../orm/types";
 import { Request, Response } from 'express';
+import {ErrorResponse, SuccessEmptyResponse} from "../types";
 
-export default async (req: Request, res: Response) => {
+
+type SuccessResponse = SuccessEmptyResponse & {
+    data: Animal[]
+};
+
+interface SearchResponse extends Response {
+    json(data: SuccessResponse | ErrorResponse): this;
+}
+
+interface SearchRequest extends Request {
+    body: SearchOptions;
+}
+
+
+export default async (req: SearchRequest, res: SearchResponse) => {
 
     try{
         res.type('application/json')

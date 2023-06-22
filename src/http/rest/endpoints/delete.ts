@@ -1,6 +1,18 @@
 import { Request, Response } from 'express';
+import {ErrorResponse, SuccessEmptyResponse} from "../types";
 
-export default async (req: Request, res: Response) => {
+
+
+
+interface DeleteResponse extends Response {
+    json(data: SuccessEmptyResponse | ErrorResponse): this;
+}
+
+interface DeleteRequest extends Request {
+    body: { id: string };
+}
+
+export default async (req: DeleteRequest, res: DeleteResponse) => {
 
     try{
         res.type('application/json')

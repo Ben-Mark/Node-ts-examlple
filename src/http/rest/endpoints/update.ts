@@ -1,7 +1,18 @@
 import { UpdateOptions} from "../../../orm/types";
 import { Request, Response } from 'express';
+import {ErrorResponse, SuccessEmptyResponse} from "../types";
 
-export default async (req: Request, res: Response) => {
+
+interface UpdateResponse extends Response {
+    json(data: SuccessEmptyResponse | ErrorResponse): this;
+}
+
+interface UpdateRequest extends Request {
+    body: UpdateOptions;
+}
+
+
+export default async (req: UpdateRequest, res: UpdateResponse) => {
 
     try{
         res.type('application/json')
