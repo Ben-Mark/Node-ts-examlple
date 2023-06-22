@@ -216,9 +216,15 @@ const getSearchQuery = (searchOptions: SearchOptions) : {params: (string | numbe
         whereClause = 'WHERE ' + whereClause.slice(4);
     }
 
+    const validSortOptions = ['name','age', 'color']; // valid sort options
+
     let orderBy = '';
     if(searchOptions.sortBy){
-        orderBy = `ORDER BY ${searchOptions.sortBy}`;
+        if (validSortOptions.includes(searchOptions.sortBy)) {
+            orderBy = `ORDER BY ${searchOptions.sortBy}`;
+        } else {
+            throw new Error('Invalid sort option - the animal corporation doesnt allow sql injection');
+        }
     }
 
     return {
