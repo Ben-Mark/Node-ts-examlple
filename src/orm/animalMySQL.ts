@@ -6,6 +6,8 @@ import url from 'url';
 
 const dogsTableName = "dogs"
 
+
+
 class AnimalMySQL implements IAnimalDB{
     connection: mysql.Connection | any = null;
 
@@ -34,7 +36,7 @@ class AnimalMySQL implements IAnimalDB{
             CREATE TABLE IF NOT EXISTS dogs (
                 id VARCHAR(255) PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
-                age VARCHAR(255) NOT NULL,
+                age INT NOT NULL,
                 color VARCHAR(255) NOT NULL
             );
         `;
@@ -86,7 +88,7 @@ class AnimalMySQL implements IAnimalDB{
         }
     }
 
-    async readAnimalDoc(id: string): Promise<{ dog?: Dog, error: boolean | string }> {
+    async readAnimalDoc(id: string): Promise<{ animal?: Animal, error: boolean | string }> {
         try {
 
             const [rows]: any = await this.connection.execute(
@@ -100,7 +102,7 @@ class AnimalMySQL implements IAnimalDB{
 
             return {
                 error: false,
-                dog: rows[0]
+                animal: rows[0]
             }
 
         } catch (e) {
@@ -113,14 +115,14 @@ class AnimalMySQL implements IAnimalDB{
     async updateAnimalDoc(updateOptions: UpdateOptions): Promise<{ error: boolean | string }> {
         try {
 
-            const {dog, error:dogReadError} = await this.readAnimalDoc(updateOptions.id)
+            const {animal, error:dogReadError} = await this.readAnimalDoc(updateOptions.id)
             if(dogReadError){
                 return {
                     error: `failed to find dog by id: ${updateOptions.id} to perform update`
                 }
             }
 
-            const updatedDog = { ...dog, ...updateOptions };
+            const updatedDog = { ...animal, ...updateOptions };
 
             await this.connection.execute(
                 `UPDATE ${dogsTableName} SET name = ?, age = ?, color = ? WHERE id = ?`,
@@ -138,43 +140,22 @@ class AnimalMySQL implements IAnimalDB{
         }
     }
 
-    async searchAnimalDoc(searchOptions: SearchOptions): Promise<{ dogs?: Dog[], error: boolean | string }> {
+    async searchAnimalDoc(searchOptions: SearchOptions): Promise<{ animals?: Animal[], error: boolean | string }> {
         try {
-
-            let whereClause = '';
-            let params: any[] = [];
-
-            if(searchOptions.age){
-                whereClause += `AND age > ? `;
-                params.push(searchOptions.age);
-            }
-
-            if(searchOptions.notColor){
-                whereClause += `AND color != ? `;
-                params.push(searchOptions.color);
-            }
-
-            if(whereClause.length > 0) {
-                whereClause = 'WHERE ' + whereClause.slice(4);
-            }
-
-            let orderBy = '';
-            if(searchOptions.sortBy){
-                orderBy = `ORDER BY ${searchOptions.sortBy}`;
-            }
+            const {params, whereClause, orderBy} = getSearchQuery(searchOptions)
 
             const [rows]: any = await this.connection.execute(
                 `SELECT * FROM ${dogsTableName} ${whereClause} ${orderBy}`,
                 params
             );
 
-            if (!rows || rows.length === 0) {
+            if (!rows) {
                 return { error: 'Dogs search error' }
             }
 
             return {
                 error: false,
-                dogs: rows
+                animals: rows
             }
 
         } catch (e) {
@@ -182,6 +163,39 @@ class AnimalMySQL implements IAnimalDB{
                 error: e.message,
             }
         }
+    }
+}
+
+
+
+const getSearchQuery = (searchOptions: SearchOptions) : {params: any, whereClause: any, orderBy: any} => {
+
+    let whereClause = '';
+    let params: any[] = [];
+
+    if(searchOptions.ageGreaterThan){
+        whereClause += `AND age > ? `;
+        params.push(searchOptions.ageGreaterThan);
+    }
+
+    if(searchOptions.notColor){
+        whereClause += `AND color != ? `;
+        params.push(searchOptions.notColor);
+    }
+
+    if(whereClause.length > 0) {
+        whereClause = 'WHERE ' + whereClause.slice(4);
+    }
+
+    let orderBy = '';
+    if(searchOptions.sortBy){
+        orderBy = `ORDER BY ${searchOptions.sortBy}`;
+    }
+
+    return {
+        params,
+        whereClause,
+        orderBy
     }
 }
 

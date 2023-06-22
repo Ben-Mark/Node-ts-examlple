@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 export interface Animal {
     id: string;
     name: string;
-    age: string;
+    age: number;
     color: string;
 }
 
@@ -13,7 +13,7 @@ export type AnimalInput = Omit<Animal, 'id'>;
 export class Dog implements Animal {
     id: string;
     name: string;
-    age: string;
+    age: number;
     color: string;
 
     constructor(dog: AnimalInput) {
@@ -25,6 +25,13 @@ export class Dog implements Animal {
 }
 
 export type SearchOptions = {
+    ageGreaterThan?: number
+    notColor?: string
+    color?: string
+    sortBy?: string
+}
+
+export type SearchQuery = {
     age?: number
     notColor?: string
     color?: string
@@ -34,7 +41,7 @@ export type SearchOptions = {
 export type UpdateOptions = {
     id: string;
     name?: string;
-    age?: string;
+    age?: number;
     color?: string;
 }
 

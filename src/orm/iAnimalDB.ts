@@ -7,9 +7,9 @@ export interface IAnimalDB {
     initDB(): Promise<void>;
     createAnimalDoc(animal: Animal): Promise<{ error: boolean | string }>;
     deleteAnimalDoc(id: string): Promise<{ error: boolean | string }>;
-    readAnimalDoc(id: string): Promise<{ dog?: Dog, error: boolean | string }>;
+    readAnimalDoc(id: string): Promise<{ animal?: Animal, error: boolean | string }>;
     updateAnimalDoc(updateOptions: UpdateOptions): Promise<{ error: boolean | string }>;
-    searchAnimalDoc(searchOptions: SearchOptions): Promise<{ dogs?: Dog[], error: boolean | string }>;
+    searchAnimalDoc(searchOptions: SearchOptions): Promise<{ animals?: Animal[], error: boolean | string }>;
 }
 
 

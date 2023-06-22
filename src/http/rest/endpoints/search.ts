@@ -18,7 +18,7 @@ export default async (req: any, res: any) => {
 
         let searchOptions: SearchOptions = body
 
-        const { error } = await animalDB.searchAnimalDoc(searchOptions)
+        const { error, animals } = await animalDB.searchAnimalDoc(searchOptions)
 
         if(error){
             res.status(400).send({
@@ -29,6 +29,7 @@ export default async (req: any, res: any) => {
 
         res.status(200).send({
             error: false,
+            data: animals
         })
 
     } catch (e){

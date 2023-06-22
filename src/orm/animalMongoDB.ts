@@ -99,7 +99,7 @@ class AnimalMongoDB implements IAnimalDB{
     }
 
 
-    async readAnimalDoc(id: string): Promise<{ dog?: Dog, error: boolean | string }> {
+    async readAnimalDoc(id: string): Promise<{ animal?: Animal, error: boolean | string }> {
         try {
 
             const col = await this.getOrCreateCollection(this.dogsColName);
@@ -112,9 +112,9 @@ class AnimalMongoDB implements IAnimalDB{
             const query = {id: id};
 
 
-            const dogDoc: Dog = await col.findOne(query);
+            const animalDoc: Animal = await col.findOne(query);
 
-            if (!dogDoc) {
+            if (!animalDoc) {
                 const errorMessage = `Animal document by id: ${id} couldnt be found`
                 console.log(errorMessage);
                 return {
@@ -124,7 +124,7 @@ class AnimalMongoDB implements IAnimalDB{
 
             return {
                 error: false,
-                dog: dogDoc
+                animal: animalDoc
             }
 
         } catch (e) {
@@ -146,7 +146,7 @@ class AnimalMongoDB implements IAnimalDB{
                 }
             }
 
-            const {dog, error:dogReadError} = await this.readAnimalDoc(updateOptions.id)
+            const {animal, error:dogReadError} = await this.readAnimalDoc(updateOptions.id)
             if(dogReadError){
                 return {
                     error: `failed to find dog by id: ${updateOptions.id} to perform update`
@@ -155,7 +155,7 @@ class AnimalMongoDB implements IAnimalDB{
 
             const query = {id: updateOptions.id};
 
-            const updatedDog = { ...dog, ...updateOptions };
+            const updatedDog = { ...animal, ...updateOptions };
 
             const update = {$set: updatedDog};
             const options = {upsert: false};
@@ -175,7 +175,7 @@ class AnimalMongoDB implements IAnimalDB{
     }
 
 
-    async searchAnimalDoc(searchOptions: SearchOptions): Promise<{ dogs?: Dog[], error: boolean | string }> {
+    async searchAnimalDoc(searchOptions: SearchOptions): Promise<{ animals?: Animal[], error: boolean | string }> {
         try {
 
             const col = await this.getOrCreateCollection(this.dogsColName);
@@ -185,27 +185,11 @@ class AnimalMongoDB implements IAnimalDB{
                 }
             }
 
-            let query: any = {}
-            let options: any = {}
+            const {query, options} = getSearchQuery(searchOptions)
 
-            if(searchOptions.age){
-                query.age = {$gt: searchOptions.age}
-            }
+            const animals = await col.find(query, options).toArray();
 
-             if(searchOptions.notColor){
-                query.color = {$ne: searchOptions.color}
-            }
-
-            if(searchOptions.sortBy){
-                options = {
-                    sort: {[searchOptions.sortBy]: 1} // Sort by name in ascending order
-                };
-            }
-
-
-            const dogs = await col.find(query, options).toArray();
-
-            if (!dogs) {
+            if (!animals) {
                 const errorMessage = `Dogs search error`
                 console.log(errorMessage);
                 return {
@@ -215,7 +199,7 @@ class AnimalMongoDB implements IAnimalDB{
 
             return {
                 error: false,
-                dogs
+                animals
             }
 
         } catch (e) {
@@ -240,6 +224,31 @@ class AnimalMongoDB implements IAnimalDB{
     }
 
 
+}
+
+
+const getSearchQuery = (searchOptions: SearchOptions): {query: any, options: any} => {
+    let query: any = {}
+    let options: any = {}
+
+    if(searchOptions.ageGreaterThan){
+        query.age = {$gt: searchOptions.ageGreaterThan}
+    }
+
+    if(searchOptions.notColor){
+        query.color = {$ne: searchOptions.notColor}
+    }
+
+    if(searchOptions.sortBy){
+        options = {
+            sort: {[searchOptions.sortBy]: 1} // Sort by name in ascending order
+        };
+    }
+
+    return {
+        query,
+        options
+    }
 }
 
 

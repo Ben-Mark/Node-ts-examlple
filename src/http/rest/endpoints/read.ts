@@ -18,7 +18,7 @@ export default async (req: any, res: any) => {
 
         const {id}:{ id: string } = body
 
-        const {error, dog } = await animalDB.readAnimalDoc(id)
+        const {error, animal } = await animalDB.readAnimalDoc(id)
 
         if(error){
             res.status(400).send({
@@ -29,7 +29,7 @@ export default async (req: any, res: any) => {
 
         res.status(200).send({
             error: false,
-            data: dog
+            data: animal
         })
 
     } catch (e){
