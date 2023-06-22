@@ -179,9 +179,11 @@ class AnimalMySQL implements IAnimalDB{
                 }
             }
 
+            const animals: Animal[] = rows
+
             return {
                 error: false,
-                animals: rows
+                animals
             }
 
         } catch (e) {
