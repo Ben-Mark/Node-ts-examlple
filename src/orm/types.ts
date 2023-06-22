@@ -32,13 +32,6 @@ export type SearchOptions = {
 }
 
 
-export type SearchQuery = {
-    age?: number
-    notColor?: string
-    color?: string
-    sortBy?: string
-}
-
 export type UpdateOptions = {
     id: string;
     name?: string;
