@@ -30,7 +30,7 @@ export default async (req: Request, res: Response) => {
 
     } catch (e){
         console.log(e);
-        res.status(400).send({
+        res.status(500).send({
             error: e.message,
             data: false
         })

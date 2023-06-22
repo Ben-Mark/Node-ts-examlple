@@ -14,10 +14,7 @@ export default async (req: Request, res: Response) => {
         const {error, animal } = await animalDB.readAnimalDoc(id)
 
         if(error){
-            res.status(400).send({
-                error,
-            })
-            return
+            throw new Error(error)
         }
 
         res.status(200).send({
@@ -27,7 +24,7 @@ export default async (req: Request, res: Response) => {
 
     } catch (e){
         console.log(e);
-        res.status(400).send({
+        res.status(500).send({
             error: e.message
         })
     }
