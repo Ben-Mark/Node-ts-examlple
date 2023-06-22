@@ -1,4 +1,4 @@
-import { Animal, Dog, SearchOptions, UpdateOptions } from "./types";
+import {Animal, Dog, SearchOptions, UpdateOptions} from "./types";
 import mysql from 'mysql2/promise';
 import {IAnimalDB} from "./iAnimalDB";
 import url from 'url';
@@ -168,10 +168,10 @@ class AnimalMySQL implements IAnimalDB{
 
 
 
-const getSearchQuery = (searchOptions: SearchOptions) : {params: any, whereClause: any, orderBy: any} => {
+const getSearchQuery = (searchOptions: SearchOptions) : {params: (string | number)[], whereClause: string, orderBy: string} => {
 
     let whereClause = '';
-    let params: any[] = [];
+    let params: (string | number)[] = [];
 
     if(searchOptions.ageGreaterThan){
         whereClause += `AND age > ? `;

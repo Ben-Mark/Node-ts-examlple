@@ -1,13 +1,7 @@
-import axios from 'axios'
-import {AnimalInput, Dog, SearchOptions} from "../../../orm/types";
-/**
- * once this endpoint is called
- * this server searches for the registered ws event 'public-ssh-key-arrived'
- * and emits that to all registered sockets
- *
- */
+import { SearchOptions} from "../../../orm/types";
+import { Request, Response } from 'express';
 
-export default async (req: any, res: any) => {
+export default async (req: Request, res: Response) => {
 
     try{
         res.type('application/json')

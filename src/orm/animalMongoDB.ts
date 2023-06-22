@@ -227,9 +227,18 @@ class AnimalMongoDB implements IAnimalDB{
 }
 
 
-const getSearchQuery = (searchOptions: SearchOptions): {query: any, options: any} => {
-    let query: any = {}
-    let options: any = {}
+type Query = {
+    age?: { $gt: number },
+    color?: { $ne: string }
+};
+
+type Options = {
+    sort?: { [key: string]: number }
+};
+
+const getSearchQuery = (searchOptions: SearchOptions): {query: Query, options: Options} => {
+    let query: Query = {}
+    let options: Options = {}
 
     if(searchOptions.ageGreaterThan){
         query.age = {$gt: searchOptions.ageGreaterThan}

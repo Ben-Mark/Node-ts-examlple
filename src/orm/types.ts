@@ -31,6 +31,7 @@ export type SearchOptions = {
     sortBy?: string
 }
 
+
 export type SearchQuery = {
     age?: number
     notColor?: string

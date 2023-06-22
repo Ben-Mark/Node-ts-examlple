@@ -1,7 +1,8 @@
 import axios from 'axios'
 import {AnimalInput, Dog} from "../../../orm/types";
+import { Request, Response } from 'express';
 
-export default async (req: any, res: any) => {
+export default async (req: Request, res: Response) => {
 
     try{
         res.type('application/json')
