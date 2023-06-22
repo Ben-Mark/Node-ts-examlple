@@ -38,7 +38,7 @@ const createApp = async (port?: number) =>{
     const httpPort = port ?? parseInt(process.env.HTTP_PORT || "36673");
 
     httpServer.listen(httpPort, '0.0.0.0', () => {
-        console.log(`Animal Perimeter interview server listening on port: ${httpPort}`)
+        console.log(`Animal interview server listening on port: ${httpPort}`)
     })
 
     app.use('/', router)
