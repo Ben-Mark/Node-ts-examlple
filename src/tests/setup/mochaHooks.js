@@ -1,7 +1,5 @@
 const fs = require('fs')
-const child_process = require('child_process')
 const propertiesReader = require('properties-reader')
-const axios = require("axios");
 const failures = []
 const successes = []
 
@@ -10,8 +8,6 @@ const successes = []
 exports.mochaHooks = {
     beforeAll: async function () {
         process.env.NODE_NO_WARNINGS="1"
-
-        //kubectl port-forward service/redis-commander 38080:80 -n develeforce-infra
     },
     beforeEach: function() {
         const title = this.currentTest.title;
@@ -52,6 +48,5 @@ exports.mochaHooks = {
             console.log("failed to write ./test-results.properties");
         }
 
-        // process.exit(0)
     }
 }
