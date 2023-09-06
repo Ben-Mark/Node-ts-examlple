@@ -1,7 +1,7 @@
 import {
     Animal, CreateDBResponse,
     DBErrorStatus, DeleteDBResponse,
-    Dog,
+    Cat,
     ReadDBResponse,
     SearchDBResponse,
     SearchOptions,
@@ -13,7 +13,7 @@ import {IAnimalDB} from "./iAnimalDB";
 import url from 'url';
 
 
-const dogsTableName = "dogs"
+const catsTableName = "cats"
 
 
 
@@ -42,9 +42,9 @@ class AnimalMySQL implements IAnimalDB{
     }
 
     async createAnimalsTables() {
-        // Create table 'dogs' if it doesn't exist
+        // Create table 'cats' if it doesn't exist
         const createTableSql = `
-            CREATE TABLE IF NOT EXISTS dogs (
+            CREATE TABLE IF NOT EXISTS cats (
                 id VARCHAR(255) PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 age INT NOT NULL,
@@ -59,7 +59,7 @@ class AnimalMySQL implements IAnimalDB{
         try {
             const { id, name, age, color } = animal;
             const query = `
-            INSERT INTO ${dogsTableName} (id, name, age, color) 
+            INSERT INTO ${catsTableName} (id, name, age, color) 
             VALUES (?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE name = ?, age = ?, color = ?;
         `;
@@ -83,7 +83,7 @@ class AnimalMySQL implements IAnimalDB{
         try {
 
             const [rows]: any = await this.connection.execute(
-                `SELECT * FROM ${dogsTableName} WHERE id = ?`,
+                `SELECT * FROM ${catsTableName} WHERE id = ?`,
                 [id]
             );
 
@@ -110,19 +110,19 @@ class AnimalMySQL implements IAnimalDB{
     async updateAnimalDoc(updateOptions: UpdateOptions): Promise<UpdateDBResponse> {
         try {
 
-            const {animal, error:dogReadError} = await this.readAnimalDoc(updateOptions.id)
-            if(dogReadError){
+            const {animal, error:catReadError} = await this.readAnimalDoc(updateOptions.id)
+            if(catReadError){
                 return {
                     error: true,
-                    errorMessage:  `failed to find dog by id: ${updateOptions.id} to perform update`
+                    errorMessage:  `failed to find cat by id: ${updateOptions.id} to perform update`
                 }
             }
 
-            const updatedDog = { ...animal, ...updateOptions };
+            const updatedCat = { ...animal, ...updateOptions };
 
             await this.connection.execute(
-                `UPDATE ${dogsTableName} SET name = ?, age = ?, color = ? WHERE id = ?`,
-                [updatedDog.name, updatedDog.age, updatedDog.color, updatedDog.id]
+                `UPDATE ${catsTableName} SET name = ?, age = ?, color = ? WHERE id = ?`,
+                [updatedCat.name, updatedCat.age, updatedCat.color, updatedCat.id]
             );
 
             return {
@@ -142,7 +142,7 @@ class AnimalMySQL implements IAnimalDB{
             await this.connect();
 
             const [rows] = await this.connection.execute(
-                `DELETE FROM ${dogsTableName} WHERE id = ?`,
+                `DELETE FROM ${catsTableName} WHERE id = ?`,
                 [id]
             );
 
@@ -168,14 +168,14 @@ class AnimalMySQL implements IAnimalDB{
             const {params, whereClause, orderBy} = getSearchQuery(searchOptions)
 
             const [rows]: any = await this.connection.execute(
-                `SELECT * FROM ${dogsTableName} ${whereClause} ${orderBy}`,
+                `SELECT * FROM ${catsTableName} ${whereClause} ${orderBy}`,
                 params
             );
 
             if (!rows) {
                 return {
                     error: true,
-                    errorMessage:  'Dogs search error'
+                    errorMessage:  'Cats search error'
                 }
             }
 

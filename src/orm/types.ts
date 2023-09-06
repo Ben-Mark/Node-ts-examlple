@@ -10,17 +10,17 @@ export interface Animal {
 
 export type AnimalInput = Omit<Animal, 'id'>;
 
-export class Dog implements Animal {
+export class Cat implements Animal {
     id: string;
     name: string;
     age: number;
     color: string;
 
-    constructor(dog: AnimalInput) {
+    constructor(cat: AnimalInput) {
         this.id =  uuidv4();
-        this.name = dog.name;
-        this.age = dog.age;
-        this.color = dog.color;
+        this.name = cat.name;
+        this.age = cat.age;
+        this.color = cat.color;
     }
 }
 
