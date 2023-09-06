@@ -18,3 +18,10 @@
 # Run - Evaluate the api
 * npm run tests
 * open in browser the html test report - "./mochawesome-report/mochawsome.html"
+
+# Exercises
+* git clone -b exercise1 https://github.com/Ben-Mark/Node-ts-examlple.git
+* Ex1 - install and run the tests - nodejs server + mongo/mysql running.
+* Ex2 - create a new endpoint
+* Ex3 - implement mongo crud/search logic
+
