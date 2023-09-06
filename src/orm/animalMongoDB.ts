@@ -10,7 +10,7 @@ const {MongoClient} = require('mongodb')
 
 class AnimalMongoDB implements IAnimalDB{
 
-    dogsColName: string = "dogs-col"
+    catsColName: string = "cats-col"
     client: any
     db: any
 
@@ -22,7 +22,7 @@ class AnimalMongoDB implements IAnimalDB{
             this.client = await MongoClient.connect(`${dbUrl.protocol}//${dbUrl.auth}@${dbUrl.hostname}:${dbUrl.port}`, {useNewUrlParser: true});
             this.db = this.client.db(dbName);
 
-            await this.getOrCreateCollection(this.dogsColName);
+            await this.getOrCreateCollection(this.catsColName);
 
             console.log(`${dbName} DB initialized`);
         }catch(e){
@@ -34,11 +34,11 @@ class AnimalMongoDB implements IAnimalDB{
     async createAnimalDoc(animal: Animal): Promise<CreateDBResponse> {
         try {
 
-            const col = await this.getOrCreateCollection(this.dogsColName);
+            const col = await this.getOrCreateCollection(this.catsColName);
             if (!col) {
                 return {
                     error: true,
-                    errorMessage: `failed to get or create collection: ${this.dogsColName} in db: ${process.env.DB_PERMIETER}`,
+                    errorMessage: `failed to get or create collection: ${this.catsColName} in db: ${process.env.DB_PERMIETER}`,
                 }
             }
 
@@ -65,11 +65,11 @@ class AnimalMongoDB implements IAnimalDB{
     async readAnimalDoc(id: string): Promise<ReadDBResponse> {
         try {
 
-            const col = await this.getOrCreateCollection(this.dogsColName);
+            const col = await this.getOrCreateCollection(this.catsColName);
             if (!col) {
                 return {
                     error: true,
-                    errorMessage: `failed to get or create collection: ${this.dogsColName} in db: ${process.env.DB_PERMIETER}`,
+                    errorMessage: `failed to get or create collection: ${this.catsColName} in db: ${process.env.DB_PERMIETER}`,
                 }
             }
 
@@ -105,27 +105,27 @@ class AnimalMongoDB implements IAnimalDB{
     async updateAnimalDoc(updateOptions: UpdateOptions): Promise<UpdateDBResponse> {
         try {
 
-            const col = await this.getOrCreateCollection(this.dogsColName);
+            const col = await this.getOrCreateCollection(this.catsColName);
             if (!col) {
                 return {
                     error: true,
-                    errorMessage: `failed to get or create collection: ${this.dogsColName} in db: ${process.env.DB_PERMIETER}`,
+                    errorMessage: `failed to get or create collection: ${this.catsColName} in db: ${process.env.DB_PERMIETER}`,
                 }
             }
 
-            const {animal, error:dogReadError} = await this.readAnimalDoc(updateOptions.id)
-            if(dogReadError){
+            const {animal, error:catReadError} = await this.readAnimalDoc(updateOptions.id)
+            if(catReadError){
                 return {
                     error: true,
-                    errorMessage: `failed to find dog by id: ${updateOptions.id} to perform update`
+                    errorMessage: `failed to find cat by id: ${updateOptions.id} to perform update`
                 }
             }
 
             const query = {id: updateOptions.id};
 
-            const updatedDog = { ...animal, ...updateOptions };
+            const updatedCat = { ...animal, ...updateOptions };
 
-            const update = {$set: updatedDog};
+            const update = {$set: updatedCat};
             const options = {upsert: false};
             await col.updateOne(query, update, options);
 
@@ -147,11 +147,11 @@ class AnimalMongoDB implements IAnimalDB{
     async deleteAnimalDoc(id: string): Promise<DeleteDBResponse> {
         try {
 
-            const col = await this.getOrCreateCollection(this.dogsColName);
+            const col = await this.getOrCreateCollection(this.catsColName);
             if (!col) {
                 return {
                     error: true,
-                    errorMessage: `failed to get or create collection: ${this.dogsColName} in db: ${process.env.DB_PERMIETER}`,
+                    errorMessage: `failed to get or create collection: ${this.catsColName} in db: ${process.env.DB_PERMIETER}`,
                 }
             }
 
@@ -159,7 +159,7 @@ class AnimalMongoDB implements IAnimalDB{
 
             const result = await col.deleteOne(query);
 
-            if (result.deletedCount === 1) {
+            if (result && result.deletedCount === 1) {
                 console.log('Animal document deleted successfully');
             } else {
                 const errorMessage = 'Document not found'
@@ -185,11 +185,11 @@ class AnimalMongoDB implements IAnimalDB{
     async searchAnimalDoc(searchOptions: SearchOptions): Promise<SearchDBResponse> {
         try {
 
-            const col = await this.getOrCreateCollection(this.dogsColName);
+            const col = await this.getOrCreateCollection(this.catsColName);
             if (!col) {
                 return {
                     error: true,
-                    errorMessage:  `failed to get or create collection: ${this.dogsColName} in db: ${process.env.DB_PERMIETER}`,
+                    errorMessage:  `failed to get or create collection: ${this.catsColName} in db: ${process.env.DB_PERMIETER}`,
                 }
             }
 
@@ -198,7 +198,7 @@ class AnimalMongoDB implements IAnimalDB{
             const animals = await col.find(query, options).toArray();
 
             if (!animals) {
-                const errorMessage = `Dogs search error`
+                const errorMessage = `Cats search error`
                 console.log(errorMessage);
                 return {
                     error: true,

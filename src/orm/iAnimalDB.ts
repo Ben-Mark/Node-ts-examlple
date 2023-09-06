@@ -2,7 +2,7 @@ import {
     Animal,
     CreateDBResponse,
     DeleteDBResponse,
-    Dog,
+    Cat,
     ReadDBResponse, SearchDBResponse,
     SearchOptions,
     UpdateDBResponse,

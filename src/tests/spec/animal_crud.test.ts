@@ -1,5 +1,5 @@
 import {expect, reportLog, request} from "../setup/baseApiTest";
-import {Animal, Dog} from "../../orm/types";
+import {Animal, Cat} from "../../orm/types";
 const {describe, it} = require('mocha');
 import { Context } from "mocha";
 
@@ -9,13 +9,12 @@ import {createApp} from "../../app";
 function runTest(testName: string, dbType: string, port: number) {
 
 
-    describe(testName, function () {
+    describe(testName, function (this: Context) {
 
-        // @ts-ignore
         this.timeout(0)
 
         process.env.DB_TYPE = dbType
-        let dogId = ""
+        let catId = ""
         let app: any
 
         it('Should wait until server is up', async function (this: Context) {
@@ -23,47 +22,55 @@ function runTest(testName: string, dbType: string, port: number) {
             app = await createApp(port)
         })
 
-        it('Should create a new dog', async function (this: Context) {
-            const dogData = {
+        it('Should receive 200 on server healthcheck', async function (this: Context) {
+
+            const response = await request(app).get('/healthcheck');
+
+            expect(response.status).toEqual(200);
+            expect(response.body.error).toBeFalsy();
+
+        })
+
+        it('Should create a new cat', async function (this: Context) {
+            const catData = {
                 name: "Rex",
                 age: 2,
                 color: "Brown"
             };
 
 
-            const response = await request(app).post('/create').send(dogData);
+            const response = await request(app).post('/create').send(catData);
 
             expect(response.status).toEqual(200);
             expect(response.body.error).toBeFalsy();
 
-            dogId = response.body.data.id
+            catId = response.body.data.id
 
         });
 
-
-        it('Should read the new dog created from db', async function (this: Context) {
-            const dogData = {
-                id: dogId
+        it('Should read the new cat created from db', async function (this: Context) {
+            const catData = {
+                id: catId
             };
 
-            const response = await request(app).post('/read').send(dogData);
+            const response = await request(app).post('/read').send(catData);
 
             expect(response.status).toEqual(200);
             expect(response.body.error).toBeFalsy();
 
-            const createdDog: Dog = response.body.data
-            expect(createdDog.name).toBe("Rex");
-            expect(createdDog.age).toBe(2);
-            expect(createdDog.color).toBe("Brown");
+            const createdCat: Cat = response.body.data
+            expect(createdCat.name).toBe("Rex");
+            expect(createdCat.age).toBe(2);
+            expect(createdCat.color).toBe("Brown");
         });
 
-        it('Should update the new dog created from db', async () => {
-            const dogData = {
-                id: dogId
+        it('Should update the new cat created from db', async () => {
+            const catData = {
+                id: catId
             };
 
             const updateResponse = await request(app).post('/update').send({
-                id: dogData.id,
+                id: catData.id,
                 color: "red"
             });
 
@@ -71,17 +78,17 @@ function runTest(testName: string, dbType: string, port: number) {
             expect(updateResponse.body.error).toBeFalsy();
 
 
-            const readResponse = await request(app).post('/read').send(dogData);
+            const readResponse = await request(app).post('/read').send(catData);
 
             expect(readResponse.status).toEqual(200);
             expect(readResponse.body.error).toBeFalsy();
 
-            const createdDog: Dog = readResponse.body.data
-            expect(createdDog.color).toEqual("red");
+            const createdCat: Cat = readResponse.body.data
+            expect(createdCat.color).toEqual("red");
 
         });
 
-        it('Should search for a dog by age and not color from db', async () => {
+        it('Should search for a cat by age and not color from db', async () => {
 
             const brownSearchResponse = await request(app).post('/search').send({
                 ageGreaterThan: 2,
@@ -112,12 +119,12 @@ function runTest(testName: string, dbType: string, port: number) {
         });
 
 
-        it('Should delete the new dog created from db', async () => {
-            const dogData = {
-                id: dogId
+        it('Should delete the new cat created from db', async () => {
+            const catData = {
+                id: catId
             };
 
-            const response = await request(app).post('/delete').send(dogData);
+            const response = await request(app).post('/delete').send(catData);
 
             expect(response.status).toEqual(200);
             expect(response.body.error).toBeFalsy();
