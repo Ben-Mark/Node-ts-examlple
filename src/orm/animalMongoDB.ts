@@ -147,19 +147,9 @@ class AnimalMongoDB implements IAnimalDB{
     async deleteAnimalDoc(id: string): Promise<DeleteDBResponse> {
         try {
 
-            const col = await this.getOrCreateCollection(this.dogsColName);
-            if (!col) {
-                return {
-                    error: true,
-                    errorMessage: `failed to get or create collection: ${this.dogsColName} in db: ${process.env.DB_PERMIETER}`,
-                }
-            }
+            const result = { deletedCount: 0 }
 
-            const query = {id: id};
-
-            const result = await col.deleteOne(query);
-
-            if (result.deletedCount === 1) {
+            if (result && result.deletedCount === 1) {
                 console.log('Animal document deleted successfully');
             } else {
                 const errorMessage = 'Document not found'
@@ -185,17 +175,7 @@ class AnimalMongoDB implements IAnimalDB{
     async searchAnimalDoc(searchOptions: SearchOptions): Promise<SearchDBResponse> {
         try {
 
-            const col = await this.getOrCreateCollection(this.dogsColName);
-            if (!col) {
-                return {
-                    error: true,
-                    errorMessage:  `failed to get or create collection: ${this.dogsColName} in db: ${process.env.DB_PERMIETER}`,
-                }
-            }
-
-            const {query, options} = getSearchQuery(searchOptions)
-
-            const animals = await col.find(query, options).toArray();
+            const animals = false
 
             if (!animals) {
                 const errorMessage = `Dogs search error`
