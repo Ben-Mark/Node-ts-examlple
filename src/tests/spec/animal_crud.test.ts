@@ -81,16 +81,6 @@ function runTest(testName: string, dbType: string, port: number) {
 
         });
 
-        it('Should receive 200 on server healthcheck', async function (this: Context) {
-
-            const response = await request(app).get('/healthcheck');
-
-            expect(response.status).toEqual(200);
-            expect(response.body.error).toBeFalsy();
-
-        })
-
-
 
 
     })

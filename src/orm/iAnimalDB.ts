@@ -8,7 +8,6 @@ import {
     UpdateDBResponse,
     UpdateOptions
 } from "./types";
-import AnimalMySQL from "./animalMySQL";
 import AnimalMongoDB from "./animalMongoDB";
 
 
@@ -38,8 +37,6 @@ export class DBFactory {
         }
 
         switch(DB_TYPE) {
-            case 'mysql':
-                return new AnimalMySQL();
             case 'mongodb':
                 return new AnimalMongoDB();
             default:
