@@ -1,5 +1,4 @@
 import { Router} from "express";
-import healthcheck from './endpoints/healthcheck';
 import createAnimal from './endpoints/create';
 import readAnimal from './endpoints/read';
 import updateAnimal from './endpoints/update';
@@ -8,7 +7,6 @@ import searchAnimal from './endpoints/search';
 
 const router = Router();
 
-router.get('/healthcheck', healthcheck);
 router.post('/search', searchAnimal);
 router.post('/create', createAnimal);
 router.post('/read', readAnimal);

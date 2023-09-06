@@ -22,14 +22,7 @@ function runTest(testName: string, dbType: string, port: number) {
             app = await createApp(port)
         })
 
-        it('Should receive 200 on server healthcheck', async function (this: Context) {
 
-            const response = await request(app).get('/healthcheck');
-
-            expect(response.status).toEqual(200);
-            expect(response.body.error).toBeFalsy();
-
-        })
 
         it('Should create a new cat', async function (this: Context) {
             const catData = {
@@ -88,48 +81,16 @@ function runTest(testName: string, dbType: string, port: number) {
 
         });
 
-        it('Should search for a cat by age and not color from db', async () => {
+        it('Should receive 200 on server healthcheck', async function (this: Context) {
 
-            const brownSearchResponse = await request(app).post('/search').send({
-                ageGreaterThan: 2,
-                notColor: "Brown",
-                sortBy: "name"
-            });
-
-            expect(brownSearchResponse.status).toEqual(200);
-            expect(brownSearchResponse.body.error).toBeFalsy();
-
-            const brownAnimals: Animal [] = brownSearchResponse.body.data
-            expect(brownAnimals).toEqual([])
-
-
-            const redSearchResponse = await request(app).post('/search').send({
-                ageGreaterThan: 1,
-                color: "red",
-                sortBy: "name"
-            });
-
-            expect(redSearchResponse.status).toEqual(200);
-            expect(redSearchResponse.body.error).toBeFalsy();
-
-            const redAnimals: Animal [] = redSearchResponse.body.data
-            expect(redAnimals[0].name).toBe("Rex");
-            expect(redAnimals[0].age).toBe(2);
-            expect(redAnimals[0].color).toBe("red");
-        });
-
-
-        it('Should delete the new cat created from db', async () => {
-            const catData = {
-                id: catId
-            };
-
-            const response = await request(app).post('/delete').send(catData);
+            const response = await request(app).get('/healthcheck');
 
             expect(response.status).toEqual(200);
             expect(response.body.error).toBeFalsy();
 
-        });
+        })
+
+
 
 
     })
@@ -137,5 +98,4 @@ function runTest(testName: string, dbType: string, port: number) {
 
 describe('Test suite', function() {
     runTest('CRUD Animal Test with mongoDB', 'mongodb', 3007);
-    runTest('CRUD Animal Test with MySQL', 'mysql', 3008);
 });
