@@ -1,7 +1,3 @@
-// process.env.NODE_ENV
-//     ? require('dotenv').config({path: `.env.${process.env.NODE_ENV}`})
-//     : require('dotenv').config()
-
 process.env.NODE_ENV='dev'
 process.env.SYSTEM_UNDER_TEST = 'true';
 const request = require('supertest');

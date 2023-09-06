@@ -1,5 +1,5 @@
 {
-  "name": "animality",
+  "name": "animals",
   "version": "1.0.0",
   "description": "animal service",
   "main": "src/app.js",
@@ -8,7 +8,7 @@
     "start-local": "NODE_ENV=dev ts-node-dev src/app.ts",
     "build": "tsc"
   },
-  "author": "ben mark",
+  "author": "Ben Mark",
   "dependencies": {
     "axios": "^0.27.2",
     "body-parser": "^1.19.1",

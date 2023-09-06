@@ -4,7 +4,6 @@ const propertiesReader = require('properties-reader')
 const axios = require("axios");
 const failures = []
 const successes = []
-import {terminate} from "../../app";
 
 
 

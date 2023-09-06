@@ -17,7 +17,6 @@ const createApp = async (port?: number) =>{
 
     app = express()
 
-
     const cors = require('cors');
 
 
@@ -63,16 +62,12 @@ if(!isApiTestMode){
 }
 
 
-
-
 const terminate = () => {
     httpServer.close((err: any) => {
         console.log('Http server terminated.');
         process.exit(err ? 1 : 0);
     });
 }
-
-
 
 export {
     createApp,
