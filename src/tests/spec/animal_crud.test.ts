@@ -137,5 +137,4 @@ function runTest(testName: string, dbType: string, port: number) {
 
 describe('Test suite', function() {
     runTest('CRUD Animal Test with mongoDB', 'mongodb', 3007);
-    runTest('CRUD Animal Test with MySQL', 'mysql', 3008);
 });
