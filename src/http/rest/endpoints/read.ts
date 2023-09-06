@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import {ErrorResponse, SuccessEmptyResponse} from "../types";
-import {Animal, DBErrorStatus, ReadDBResponse} from "../../../orm/types";
+import {Animal, ReadDBResponse} from "../../../orm/types";
 
 
 

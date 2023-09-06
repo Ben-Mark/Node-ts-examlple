@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import {ErrorResponse, SuccessEmptyResponse} from "../types";
-import {DBErrorStatus, DeleteDBResponse} from "../../../orm/types";
+import {DeleteDBResponse} from "../../../orm/types";
 
 
 

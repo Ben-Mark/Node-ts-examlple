@@ -1,4 +1,4 @@
-import {DBErrorStatus, UpdateDBResponse, UpdateOptions} from "../../../orm/types";
+import { UpdateDBResponse, UpdateOptions} from "../../../orm/types";
 import { Request, Response } from 'express';
 import {ErrorResponse, SuccessEmptyResponse} from "../types";
 
@@ -19,9 +19,7 @@ export default async (req: UpdateRequest, res: UpdateResponse) => {
 
         const animalDB = req.app.get('animalDB')
 
-        const body = req.body
-
-        const updateOptions: UpdateOptions = body
+        const updateOptions: UpdateOptions = req.body
 
         const updateDBResponse: UpdateDBResponse = await animalDB.updateAnimalDoc(updateOptions)
 

@@ -23,9 +23,7 @@ export default async (req: SearchRequest, res: SearchResponse) => {
 
         const animalDB = req.app.get('animalDB')
 
-        const body = req.body
-
-        let searchOptions: SearchOptions = body
+        let searchOptions: SearchOptions = req.body
 
         const searchDBResponse: SearchDBResponse = await animalDB.searchAnimalDoc(searchOptions)
 

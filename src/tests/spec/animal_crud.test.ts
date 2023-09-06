@@ -1,12 +1,14 @@
-import {expect, request} from "../setup/baseApiTest";
+import {expect, reportLog, request} from "../setup/baseApiTest";
 import {Animal, Dog} from "../../orm/types";
 const {describe, it} = require('mocha');
-
+import { Context } from "mocha";
 
 import {createApp} from "../../app";
 
 
 function runTest(testName: string, dbType: string, port: number) {
+
+
     describe(testName, function () {
 
         // @ts-ignore
@@ -16,16 +18,18 @@ function runTest(testName: string, dbType: string, port: number) {
         let dogId = ""
         let app: any
 
-        it('Should wait until server is up', async () => {
+        it('Should wait until server is up', async function (this: Context) {
+            reportLog.call(this,'text message..')
             app = await createApp(port)
         })
 
-        it('Should create a new dog', async () => {
+        it('Should create a new dog', async function (this: Context) {
             const dogData = {
                 name: "Rex",
                 age: 2,
                 color: "Brown"
             };
+
 
             const response = await request(app).post('/create').send(dogData);
 
@@ -37,7 +41,7 @@ function runTest(testName: string, dbType: string, port: number) {
         });
 
 
-        it('Should read the new dog created from db', async () => {
+        it('Should read the new dog created from db', async function (this: Context) {
             const dogData = {
                 id: dogId
             };
