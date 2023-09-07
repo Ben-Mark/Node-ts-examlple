@@ -16,9 +16,27 @@ async function init() {
         console.log(error)
     }
 }
+
+
+const main = async () => {
+
+    const param = await init().then(res => {
+        console.log(res)
+        throw new Error("Test error")
+        return res
+    })
+        .catch(err=>{
+            console.error(err);
+            return err
+        })
+
+
+    console.log(param)
+
+}
+
 console.log("Script start")
 init()
 init()
-init()
-console.log(init())
-console.log("Script End")
+
+
