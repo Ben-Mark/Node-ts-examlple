@@ -23,6 +23,7 @@
 # For windows only
 * npm install tsc -g
 * npm install cross-env -g
+* npm install mocha -g
 
 
 # Run - Evaluate the api
