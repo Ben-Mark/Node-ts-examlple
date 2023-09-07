@@ -40,7 +40,7 @@ const createApp = async (port?: number) =>{
         console.log(`Animal interview server listening on port: ${httpPort}`)
     })
 
-    app.use('/', router)
+    app.use('/api/v1', router)
 
     app.set('etag', false)
 
