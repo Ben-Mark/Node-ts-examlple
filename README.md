@@ -20,6 +20,10 @@
 * npm i
 * npm run build
 
+# For windows only
+* npm install tsc -g
+* npm install cross-env -g
+
 
 # Run - Evaluate the api
 * npm run tests
