@@ -1,3 +1,7 @@
+process.env.NODE_ENV='dev'
+process.env.NODE_NO_WARNINGS='1'
+process.env.LOG_LEVEL='info'
+process.env.SYSTEM_UNDER_TEST='true'
 import {expect, reportLog, request} from "../setup/baseApiTest";
 import {Animal, Cat} from "../../orm/types";
 const {describe, it} = require('mocha');
