@@ -1,3 +1,4 @@
+process.env.NODE_ENV='dev'
 import {expect, reportLog, request} from "../setup/baseApiTest";
 import {Animal, Cat} from "../../orm/types";
 const {describe, it} = require('mocha');

@@ -1,3 +1,4 @@
+process.env.NODE_ENV='dev'
 const express = require('express')
 require('./config')
 const bodyParser = require('body-parser')
