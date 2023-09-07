@@ -8,7 +8,7 @@ import url from "url";
 const {MongoClient} = require('mongodb')
 
 
-class AnimalMongoDB implements IAnimalDB{
+class AnimalMongoDB implements IAnimalDB {
 
     catsColName: string = "cats-col"
     client: any
