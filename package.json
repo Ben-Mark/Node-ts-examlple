@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "tests": "NODE_ENV=dev NODE_NO_WARNINGS=1 LOG_LEVEL=info SYSTEM_UNDER_TEST=true mocha --config=src/tests/setup/.mocharc.json",
-    "tests-win": "NODE_ENV=dev&&NODE_NO_WARNINGS=1&&LOG_LEVEL=info&&SYSTEM_UNDER_TEST=true&&mocha --config=src/tests/setup/.mocharc.json",
+    "tests-win": "mocha --config=src/tests/setup/.mocharc.json",
     "start-local": "NODE_ENV=dev ts-node-dev src/app.ts",
     "start-local-win": "cross-env ts-node-dev src/app.ts",
     "build": "tsc"
