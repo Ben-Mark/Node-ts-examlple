@@ -26,7 +26,14 @@ function runTest(testName: string, dbType: string, port: number) {
             app = await createApp(port)
         })
 
+        it('Should receive 200 on server healthcheck', async function (this: Context) {
 
+            const response = await request(app).get('/healthcheck');
+
+            expect(response.status).toEqual(200);
+            expect(response.body.error).toBeFalsy();
+
+        })
 
         it('Should create a new cat', async function (this: Context) {
             const catData = {
