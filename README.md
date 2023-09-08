@@ -20,14 +20,12 @@
 * npm i
 * npm run build
 
-# For windows only
-* npm install tsc -g
-* npm install cross-env -g
-* npm install mocha -g
-
 
 # Run - Evaluate the api
-* npm run tests
+* MacOs
+  * npm run tests
+* windows
+  * npm run tests-win
 * open in browser the html test report - "./mochawesome-report/mochawsome.html"
 
 
