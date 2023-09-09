@@ -103,7 +103,7 @@ function runTest(testName: string, dbType: string, port: number) {
             expect(brownSearchResponse.status).toEqual(200);
             expect(brownSearchResponse.body.error).toBeFalsy();
 
-            const brownAnimals: Animal [] = brownSearchResponse.body.data
+            const brownAnimals: Animal [] = brownSearchResponse.body.animals
             expect(brownAnimals).toEqual([])
 
 
@@ -116,7 +116,7 @@ function runTest(testName: string, dbType: string, port: number) {
             expect(redSearchResponse.status).toEqual(200);
             expect(redSearchResponse.body.error).toBeFalsy();
 
-            const redAnimals: Animal [] = redSearchResponse.body.data
+            const redAnimals: Animal [] = redSearchResponse.body.animals
             expect(redAnimals[0].name).toBe("Rex");
             expect(redAnimals[0].age).toBe(2);
             expect(redAnimals[0].color).toBe("red");

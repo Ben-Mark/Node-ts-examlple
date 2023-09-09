@@ -29,6 +29,7 @@ export type SearchOptions = {
     notColor?: string
     color?: string
     sortBy?: string
+    searchString?: string
 }
 
 

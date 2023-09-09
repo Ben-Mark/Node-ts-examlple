@@ -236,6 +236,7 @@ class AnimalMongoDB implements IAnimalDB{
 type Query = {
     age?: { $gt: number },
     color?: { $ne: string }
+    name?: RegExp
 };
 
 type Options = {
@@ -245,6 +246,10 @@ type Options = {
 const getSearchQuery = (searchOptions: SearchOptions): {query: Query, options: Options} => {
     let query: Query = {}
     let options: Options = {}
+
+    if(searchOptions.searchString){
+        query = { name: new RegExp(searchOptions.searchString, 'i') };
+    }
 
     if(searchOptions.ageGreaterThan){
         query.age = {$gt: searchOptions.ageGreaterThan}

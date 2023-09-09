@@ -8,7 +8,7 @@ interface SearchRequest extends Request {
 }
 
 type SuccessResponse = SuccessEmptyResponse & {
-    data: Animal[]
+    animals: Animal[]
 };
 
 interface SearchResponse extends Response {
@@ -33,7 +33,7 @@ export default async (req: SearchRequest, res: SearchResponse) => {
 
         res.status(200).send({
             error: false,
-            data: searchDBResponse.animals
+            animals: searchDBResponse.animals
         })
 
     } catch (e){
