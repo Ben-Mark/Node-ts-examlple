@@ -3,7 +3,7 @@ process.env.NODE_NO_WARNINGS='1'
 process.env.LOG_LEVEL='info'
 process.env.SYSTEM_UNDER_TEST='true'
 import {expect, reportLog, request} from "../setup/baseApiTest";
-import {Animal, Cat} from "../../orm/types";
+import {IAnimal} from "../../orm/types";
 const {describe, it} = require('mocha');
 import { Context } from "mocha";
 
@@ -62,7 +62,7 @@ function runTest(testName: string, dbType: string, port: number) {
             expect(response.status).toEqual(200);
             expect(response.body.error).toBeFalsy();
 
-            const createdCat: Cat = response.body.data
+            const createdCat: IAnimal = response.body.data
             expect(createdCat.name).toBe("Rex");
             expect(createdCat.age).toBe(2);
             expect(createdCat.color).toBe("Brown");
@@ -87,7 +87,7 @@ function runTest(testName: string, dbType: string, port: number) {
             expect(readResponse.status).toEqual(200);
             expect(readResponse.body.error).toBeFalsy();
 
-            const createdCat: Cat = readResponse.body.data
+            const createdCat: IAnimal = readResponse.body.data
             expect(createdCat.color).toEqual("red");
 
         });
@@ -103,7 +103,7 @@ function runTest(testName: string, dbType: string, port: number) {
             expect(brownSearchResponse.status).toEqual(200);
             expect(brownSearchResponse.body.error).toBeFalsy();
 
-            const brownAnimals: Animal [] = brownSearchResponse.body.animals
+            const brownAnimals: IAnimal [] = brownSearchResponse.body.animals
             expect(brownAnimals).toEqual([])
 
 
@@ -116,7 +116,7 @@ function runTest(testName: string, dbType: string, port: number) {
             expect(redSearchResponse.status).toEqual(200);
             expect(redSearchResponse.body.error).toBeFalsy();
 
-            const redAnimals: Animal [] = redSearchResponse.body.animals
+            const redAnimals: IAnimal [] = redSearchResponse.body.animals
             expect(redAnimals[0].name).toBe("Rex");
             expect(redAnimals[0].age).toBe(2);
             expect(redAnimals[0].color).toBe("red");

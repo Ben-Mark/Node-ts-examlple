@@ -1,16 +1,17 @@
 import {
-    Animal, CreateDBResponse, DBErrorStatus, DeleteDBResponse, ReadDBResponse, SearchDBResponse,
+    Animal,IAnimal, CreateDBResponse, DBErrorStatus, DeleteDBResponse, ReadDBResponse, SearchDBResponse,
     SearchOptions, UpdateDBResponse, UpdateOptions,
 } from "./types";
-import {IAnimalDB} from "./iAnimalDB";
 import url from "url";
 
-const {MongoClient} = require('mongodb')
+import {MongoClient, Document} from 'mongodb'
+import {BaseAnimalDB} from "./BaseAnimalDB";
+import {IAnimalDB} from "./iAnimalDB";
 
 
-class AnimalMongoDB implements IAnimalDB{
+class AnimalMongoDB extends BaseAnimalDB implements IAnimalDB{
 
-    catsColName: string = "cats-col"
+    catsColName: string = "animals-col"
     client: any
     db: any
 
@@ -19,10 +20,13 @@ class AnimalMongoDB implements IAnimalDB{
         try{
             const dbUrl = url.parse(process.env.MONGO_DB_URI || 'MISSING MONGO_DB_URI env variable, contact Animal support');
             const dbName = dbUrl.pathname?.substring(1) || '';
-            this.client = await MongoClient.connect(`${dbUrl.protocol}//${dbUrl.auth}@${dbUrl.hostname}:${dbUrl.port}`, {useNewUrlParser: true});
+            //, {useNewUrlParser: true}
+            this.client = await MongoClient.connect(`${dbUrl.protocol}//${dbUrl.auth}@${dbUrl.hostname}:${dbUrl.port}`);
             this.db = this.client.db(dbName);
 
-            await this.getOrCreateCollection(this.catsColName);
+            await this.dropAndCreateCollection(this.catsColName)
+            await this.initDocuments()
+            // await this.getOrCreateCollection(this.catsColName);
 
             console.log(`${dbName} DB initialized`);
         }catch(e){
@@ -31,7 +35,7 @@ class AnimalMongoDB implements IAnimalDB{
         }
     }
 
-    async createAnimalDoc(animal: Animal): Promise<CreateDBResponse> {
+    async createAnimalDoc(animal: IAnimal): Promise<CreateDBResponse> {
         try {
 
             const col = await this.getOrCreateCollection(this.catsColName);
@@ -60,6 +64,8 @@ class AnimalMongoDB implements IAnimalDB{
         }
 
     }
+
+
 
 
     async readAnimalDoc(id: string): Promise<ReadDBResponse> {
@@ -228,6 +234,26 @@ class AnimalMongoDB implements IAnimalDB{
 
         return col;
     }
+
+    dropAndCreateCollection = async (colName: string): Promise<any> => {
+        try {
+            // Check if the collection exists
+            const collectionNames: Document[] = await this.db.listCollections().toArray();
+            const collectionExists = collectionNames.some((col: Document) => col.name === colName);
+
+            // Drop the collection if it exists
+            if (collectionExists) {
+                await this.db.collection(colName).drop();
+                console.log(`Dropped collection: ${colName}`);
+            }
+
+            // Create or get the collection using existing method
+            return await this.getOrCreateCollection(colName);
+        } catch (e) {
+            console.error(`Error in dropAndCreateCollection: ${e.message}`);
+            throw new Error(e);
+        }
+    };
 
 
 }

@@ -2,7 +2,7 @@ import {
     Animal,
     CreateDBResponse,
     DeleteDBResponse,
-    Cat,
+    IAnimal,
     ReadDBResponse, SearchDBResponse,
     SearchOptions,
     UpdateDBResponse,
@@ -14,11 +14,12 @@ import AnimalMongoDB from "./animalMongoDB";
 
 export interface IAnimalDB {
     initDB(): Promise<void>;
-    createAnimalDoc(animal: Animal): Promise<CreateDBResponse>;
+    createAnimalDoc(animal: IAnimal): Promise<CreateDBResponse>;
     deleteAnimalDoc(id: string): Promise<DeleteDBResponse>;
     readAnimalDoc(id: string): Promise<ReadDBResponse>;
     updateAnimalDoc(updateOptions: UpdateOptions): Promise<UpdateDBResponse>;
     searchAnimalDoc(searchOptions: SearchOptions): Promise<SearchDBResponse>;
+
 }
 
 

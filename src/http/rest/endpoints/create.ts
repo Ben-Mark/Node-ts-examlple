@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {AnimalInput, CreateDBResponse, Cat} from "../../../orm/types";
+import {AnimalInput, CreateDBResponse, Animal} from "../../../orm/types";
 import { Request, Response } from 'express';
 import {ErrorResponse, SuccessIdResponse} from "../types";
 
@@ -24,7 +24,7 @@ export default async (req: CreateRequest, res: CreateResponse) => {
 
         let animalInput: AnimalInput = req.body
 
-        const cat = new Cat(animalInput)
+        const cat = new Animal(animalInput)
 
         const createDBResponse: CreateDBResponse = await animalDB.createAnimalDoc(cat)
 

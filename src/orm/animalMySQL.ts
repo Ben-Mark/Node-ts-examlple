@@ -1,7 +1,8 @@
 import {
-    Animal, CreateDBResponse,
+    IAnimal,
+    CreateDBResponse,
     DBErrorStatus, DeleteDBResponse,
-    Cat,
+    Animal,
     ReadDBResponse,
     SearchDBResponse,
     SearchOptions,
@@ -9,20 +10,23 @@ import {
     UpdateOptions
 } from "./types";
 import mysql from 'mysql2/promise';
-import {IAnimalDB} from "./iAnimalDB";
+import { IAnimalDB} from "./iAnimalDB";
 import url from 'url';
-
+import {BaseAnimalDB} from "./BaseAnimalDB";
 
 const catsTableName = "cats"
 
 
 
-class AnimalMySQL implements IAnimalDB{
+class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
+
     connection: mysql.Connection | any = null;
 
     async initDB() {
         await this.connect();
-        await this.createAnimalsTables();
+        await this.dropAndCreateAnimalsTable();
+        await this.initDocuments()
+        // await this.createAnimalsTables();
     }
 
     async connect() {
@@ -55,7 +59,32 @@ class AnimalMySQL implements IAnimalDB{
         await this.connection.execute(createTableSql);
     }
 
-    async createAnimalDoc(animal: Animal): Promise<CreateDBResponse> {
+    async dropAndCreateAnimalsTable(): Promise<void> {
+        try {
+            // Drop the table 'cats' if it exists
+            await this.connection.execute('DROP TABLE IF EXISTS cats');
+            console.log('Dropped table: cats');
+
+            // Create the table 'cats'
+            const createTableSql = `
+        CREATE TABLE cats (
+            id VARCHAR(255) PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            age INT NOT NULL,
+            color VARCHAR(255) NOT NULL
+        );
+      `;
+
+            await this.connection.execute(createTableSql);
+            console.log('Created table: cats');
+
+        } catch (e) {
+            console.error(`Error in dropAndCreateAnimalsTable: ${e.message}`);
+            throw new Error(e);
+        }
+    }
+
+    async createAnimalDoc(animal: IAnimal): Promise<CreateDBResponse> {
         try {
             const { id, name, age, color } = animal;
             const query = `
@@ -179,7 +208,7 @@ class AnimalMySQL implements IAnimalDB{
                 }
             }
 
-            const animals: Animal[] = rows
+            const animals: IAnimal[] = rows
 
             return {
                 error: false,

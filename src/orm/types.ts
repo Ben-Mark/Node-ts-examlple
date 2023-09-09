@@ -1,26 +1,26 @@
 const { v4: uuidv4 } = require('uuid');
 
 
-export interface Animal {
+export interface IAnimal {
     id: string;
     name: string;
     age: number;
     color: string;
 }
 
-export type AnimalInput = Omit<Animal, 'id'>;
+export type AnimalInput = Omit<IAnimal, 'id'>;
 
-export class Cat implements Animal {
+export class Animal implements IAnimal {
     id: string;
     name: string;
     age: number;
     color: string;
 
-    constructor(cat: AnimalInput) {
+    constructor(animal: AnimalInput) {
         this.id =  uuidv4();
-        this.name = cat.name;
-        this.age = cat.age;
-        this.color = cat.color;
+        this.name = animal.name;
+        this.age = animal.age;
+        this.color = animal.color;
     }
 }
 
