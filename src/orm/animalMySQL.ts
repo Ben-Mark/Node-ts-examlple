@@ -10,15 +10,14 @@ import {
     UpdateOptions
 } from "./types";
 import mysql from 'mysql2/promise';
-import { IAnimalDB} from "./iAnimalDB";
+import {IAnimalDB} from "./iAnimalDB";
 import url from 'url';
 import {BaseAnimalDB} from "./BaseAnimalDB";
 
 const catsTableName = "cats"
 
 
-
-class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
+class AnimalMySQL extends BaseAnimalDB implements IAnimalDB {
 
     connection: mysql.Connection | any = null;
 
@@ -86,7 +85,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
 
     async createAnimalDoc(animal: IAnimal): Promise<CreateDBResponse> {
         try {
-            const { id, name, age, color } = animal;
+            const {id, name, age, color} = animal;
             const query = `
             INSERT INTO ${catsTableName} (id, name, age, color) 
             VALUES (?, ?, ?, ?)
@@ -98,11 +97,11 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
                 [id, name, age, color, name, age, color]
             );
 
-            return { error: false }
+            return {error: false}
         } catch (e) {
             return {
                 error: true,
-                errorMessage:  e.message,
+                errorMessage: e.message,
             }
         }
     }
@@ -119,7 +118,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
             if (rows.length === 0) {
                 return {
                     error: true,
-                    errorMessage:  `Animal document by id: ${id} couldnt be found`
+                    errorMessage: `Animal document by id: ${id} couldnt be found`
                 }
             }
 
@@ -131,7 +130,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
         } catch (e) {
             return {
                 error: true,
-                errorMessage:  e.message,
+                errorMessage: e.message,
             }
         }
     }
@@ -139,15 +138,15 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
     async updateAnimalDoc(updateOptions: UpdateOptions): Promise<UpdateDBResponse> {
         try {
 
-            const {animal, error:catReadError} = await this.readAnimalDoc(updateOptions.id)
-            if(catReadError){
+            const {animal, error: catReadError} = await this.readAnimalDoc(updateOptions.id)
+            if (catReadError) {
                 return {
                     error: true,
-                    errorMessage:  `failed to find cat by id: ${updateOptions.id} to perform update`
+                    errorMessage: `failed to find cat by id: ${updateOptions.id} to perform update`
                 }
             }
 
-            const updatedCat = { ...animal, ...updateOptions };
+            const updatedCat = {...animal, ...updateOptions};
 
             await this.connection.execute(
                 `UPDATE ${catsTableName} SET name = ?, age = ?, color = ? WHERE id = ?`,
@@ -161,7 +160,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
         } catch (e) {
             return {
                 error: true,
-                errorMessage:  e.message,
+                errorMessage: e.message,
             }
         }
     }
@@ -178,16 +177,16 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
             if (rows.affectedRows === 0) {
                 return {
                     error: true,
-                    errorMessage:  'Document not found'
+                    errorMessage: 'Document not found'
                 }
             }
 
-            return { error: false }
+            return {error: false}
 
         } catch (e) {
             return {
                 error: true,
-                errorMessage:  e.message,
+                errorMessage: e.message,
             }
         }
     }
@@ -204,7 +203,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
             if (!rows) {
                 return {
                     error: true,
-                    errorMessage:  'Cats search error'
+                    errorMessage: 'Cats search error'
                 }
             }
 
@@ -218,37 +217,36 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB{
         } catch (e) {
             return {
                 error: true,
-                errorMessage:  e.message,
+                errorMessage: e.message,
             }
         }
     }
 }
 
 
-
-const getSearchQuery = (searchOptions: SearchOptions) : {params: (string | number)[], whereClause: string, orderBy: string} => {
+const getSearchQuery = (searchOptions: SearchOptions): { params: (string | number)[], whereClause: string, orderBy: string } => {
 
     let whereClause = '';
     let params: (string | number)[] = [];
 
-    if(searchOptions.ageGreaterThan){
+    if (searchOptions.ageGreaterThan) {
         whereClause += `AND age > ? `;
         params.push(searchOptions.ageGreaterThan);
     }
 
-    if(searchOptions.notColor){
+    if (searchOptions.notColor) {
         whereClause += `AND color != ? `;
         params.push(searchOptions.notColor);
     }
 
-    if(whereClause.length > 0) {
+    if (whereClause.length > 0) {
         whereClause = 'WHERE ' + whereClause.slice(4);
     }
 
-    const validSortOptions = ['name','age', 'color']; // valid sort options
+    const validSortOptions = ['name', 'age', 'color']; // valid sort options
 
     let orderBy = '';
-    if(searchOptions.sortBy){
+    if (searchOptions.sortBy) {
         if (validSortOptions.includes(searchOptions.sortBy)) {
             orderBy = `ORDER BY ${searchOptions.sortBy}`;
         } else {
