@@ -16,7 +16,7 @@
 
 
 # Install
-* docker-compose up --build -d
+* docker-compose up -d
 * npm i
 * npm run build
 
@@ -35,3 +35,6 @@
 * Ex2 - create a new endpoint
 * Ex3 - implement mongo crud/search logic
 
+# Deploy (make sure docker containers are down)
+* docker-compose down
+* docker-compose up --build -d --exit-code-from test

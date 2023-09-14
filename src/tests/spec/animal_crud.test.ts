@@ -1,7 +1,4 @@
-process.env.NODE_ENV='dev'
-process.env.NODE_NO_WARNINGS='1'
-process.env.LOG_LEVEL='info'
-process.env.SYSTEM_UNDER_TEST='true'
+
 import {expect, reportLog, request} from "../setup/baseApiTest";
 import {IAnimal} from "../../orm/types";
 const {describe, it} = require('mocha');
@@ -10,7 +7,7 @@ import { Context } from "mocha";
 import {createApp} from "../../app";
 
 
-function runTest(testName: string, dbType: string, port: number) {
+function runTest(testName: string, dbType: string, port?: number) {
 
 
     describe(testName, function (this: Context) {
@@ -23,7 +20,12 @@ function runTest(testName: string, dbType: string, port: number) {
 
         it('Should wait until server is up', async function (this: Context) {
             reportLog.call(this,'text message..')
-            app = await createApp(port)
+            if(process.env.NODE_ENV === "dev"){
+                app = await createApp(port)
+            }else{
+                app = await createApp()
+            }
+
         })
 
         it('Should receive 200 on server healthcheck', async function (this: Context) {
@@ -135,6 +137,16 @@ function runTest(testName: string, dbType: string, port: number) {
 }
 
 describe('Test suite', function() {
-    runTest('CRUD Animal Test with mongoDB', 'mongodb', 3007);
-    runTest('CRUD Animal Test with MySQL', 'mysql', 3008);
+
+    if(process.env.NODE_ENV==="production"){
+        if(!process.env.DEFAULT_DB_TYPE){
+            throw new Error("missing default process.env.DEFAULT_DB_TYPE: mongodb | mysql")
+        }
+        const dbType: string = process.env.DEFAULT_DB_TYPE
+        runTest('CRUD Animal Test with mongoDB', dbType);
+    }else{
+        runTest('CRUD Animal Test with mongoDB', 'mongodb', 3007);
+        runTest('CRUD Animal Test with MySQL', 'mysql', 3008);
+    }
+
 });

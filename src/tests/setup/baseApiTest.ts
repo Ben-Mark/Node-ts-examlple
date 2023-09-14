@@ -1,5 +1,4 @@
-process.env.NODE_ENV='dev'
-process.env.SYSTEM_UNDER_TEST = 'true';
+import '../../config'
 const request = require('supertest');
 import { Context } from 'mocha';
 import expect from 'expect'

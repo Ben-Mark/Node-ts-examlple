@@ -1,4 +1,3 @@
-process.env.NODE_ENV='dev'
 const express = require('express')
 require('./config')
 const bodyParser = require('body-parser')
@@ -35,7 +34,11 @@ const createApp = async (port?: number) =>{
 
     httpServer = createServer(app)
 
-    const httpPort = port ?? parseInt(process.env.HTTP_PORT || "36673");
+    if(!port && !process.env.HTTP_PORT){
+        throw new Error("no port was defined, aborting.")
+    }
+    // @ts-ignore
+    const httpPort = port ?? parseInt(process.env.HTTP_PORT);
 
     httpServer.listen(httpPort, '0.0.0.0', () => {
         console.log(`Animal interview server listening on port: ${httpPort}`)

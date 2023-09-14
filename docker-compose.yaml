@@ -6,6 +6,12 @@ services:
     image: animals-rest:latest
     ports:
       - "3000:3000"
+  test:
+    image: animals-rest:latest
+    command: npm run tests-production
+    depends_on:
+      - mongo
+      - mysql
   mongo:
     image: mongo
     environment:
