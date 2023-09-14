@@ -13,6 +13,7 @@ import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-
 
 export abstract class BaseAnimalDB implements IAnimalDB{
 
+
     initDocuments = async (): Promise<void> => {
 
         // Create 10 animal documents
@@ -49,4 +50,5 @@ export abstract class BaseAnimalDB implements IAnimalDB{
     abstract readAnimalDoc(id: string): Promise<ReadDBResponse>;
     abstract updateAnimalDoc(updateOptions: UpdateOptions): Promise<UpdateDBResponse>;
     abstract searchAnimalDoc(searchOptions: SearchOptions): Promise<SearchDBResponse>;
+    abstract closeConnection(): Promise<void>
 }

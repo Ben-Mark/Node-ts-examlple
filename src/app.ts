@@ -13,7 +13,7 @@ let httpServer: any
 let app: any
 
 
-const createApp = async (port?: number) =>{
+const createApp = async (port?: number): Promise<{app: any, httpServer: any}> =>{
 
     app = express()
 
@@ -25,9 +25,9 @@ const createApp = async (port?: number) =>{
 
 
     const animalDB = DBFactory.createDB()
-    await animalDB.initDB().catch((err: any) => {
+    await animalDB.initDB().catch(async (err: any) => {
         console.error(err);
-        terminate()
+        await terminate()
     })
     app.set('animalDB', animalDB)
 
@@ -52,7 +52,10 @@ const createApp = async (port?: number) =>{
         console.error(err);
     })
 
-    return app
+    return {
+        httpServer,
+        app
+    }
 
 }
 
@@ -66,16 +69,25 @@ if(!isApiTestMode){
 }
 
 
-const terminate = () => {
-    try{
-        httpServer.close((err: any) => {
-            console.log('Http server terminated.');
-            process.exit(err ? 1 : 0);
-        });
-    }catch(e){
-        console.error(e)
-    }
+const terminate = async (testHttpServer?: any) => {
+    try {
 
+        const targetHttpServer = testHttpServer ? testHttpServer : httpServer
+
+        // Close the test HTTP server if provided
+        targetHttpServer.close((err: any) => {
+            console.log('Test HTTP server terminated.');
+        });
+
+        // Close the DB client connection if initialized
+        const animalDB = app?.get('animalDB');
+        if(animalDB){
+            await animalDB.closeConnection()
+        }
+
+    } catch (e) {
+        console.error('An error occurred during termination:', e);
+    }
 }
 
 export {

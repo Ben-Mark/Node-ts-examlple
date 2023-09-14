@@ -35,6 +35,17 @@ class AnimalMongoDB extends BaseAnimalDB implements IAnimalDB{
         }
     }
 
+    async closeConnection() {
+        try{
+            if (this.client) {
+                await this.client.close();
+                console.log('MySQL client terminated.');
+            }
+        }catch(e){
+            console.error(e)
+        }
+    }
+
     async createAnimalDoc(animal: IAnimal): Promise<CreateDBResponse> {
         try {
 

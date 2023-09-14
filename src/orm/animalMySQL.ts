@@ -19,7 +19,7 @@ const catsTableName = "cats"
 
 class AnimalMySQL extends BaseAnimalDB implements IAnimalDB {
 
-    connection: mysql.Connection | any = null;
+    client: mysql.Connection | any = null;
 
     async initDB() {
         await this.connect();
@@ -28,14 +28,25 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB {
         // await this.createAnimalsTables();
     }
 
+    async closeConnection() {
+        try{
+            if (this.client) {
+                await this.client.close();
+                console.log('MySQL client terminated.');
+            }
+        }catch(e){
+            console.error(e)
+        }
+    }
+
     async connect() {
-        if (!this.connection) {
+        if (!this.client) {
             const dbUrl = url.parse(process.env.MYSQL_DB_URI || 'MISSING MYSQL_DB_URI env variable, contact Animal support');
             const [username, password] = (dbUrl.auth || '').split(':');
 
             const dbName = dbUrl.pathname?.substring(1) || '';
 
-            this.connection = await mysql.createConnection({
+            this.client = await mysql.createConnection({
                 host: dbUrl.hostname || 'MISSING MYSQL_DB_URI env variable, contact Animal support',
                 user: username || 'user',
                 database: dbName, // Remove leading "/"
@@ -55,13 +66,13 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB {
             );
         `;
 
-        await this.connection.execute(createTableSql);
+        await this.client.execute(createTableSql);
     }
 
     async dropAndCreateAnimalsTable(): Promise<void> {
         try {
             // Drop the table 'cats' if it exists
-            await this.connection.execute('DROP TABLE IF EXISTS cats');
+            await this.client.execute('DROP TABLE IF EXISTS cats');
             console.log('Dropped table: cats');
 
             // Create the table 'cats'
@@ -74,7 +85,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB {
         );
       `;
 
-            await this.connection.execute(createTableSql);
+            await this.client.execute(createTableSql);
             console.log('Created table: cats');
 
         } catch (e) {
@@ -92,7 +103,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB {
             ON DUPLICATE KEY UPDATE name = ?, age = ?, color = ?;
         `;
 
-            await this.connection.execute(
+            await this.client.execute(
                 query,
                 [id, name, age, color, name, age, color]
             );
@@ -110,7 +121,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB {
     async readAnimalDoc(id: string): Promise<ReadDBResponse> {
         try {
 
-            const [rows]: any = await this.connection.execute(
+            const [rows]: any = await this.client.execute(
                 `SELECT * FROM ${catsTableName} WHERE id = ?`,
                 [id]
             );
@@ -148,7 +159,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB {
 
             const updatedCat = {...animal, ...updateOptions};
 
-            await this.connection.execute(
+            await this.client.execute(
                 `UPDATE ${catsTableName} SET name = ?, age = ?, color = ? WHERE id = ?`,
                 [updatedCat.name, updatedCat.age, updatedCat.color, updatedCat.id]
             );
@@ -169,7 +180,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB {
         try {
             await this.connect();
 
-            const [rows] = await this.connection.execute(
+            const [rows] = await this.client.execute(
                 `DELETE FROM ${catsTableName} WHERE id = ?`,
                 [id]
             );
@@ -195,7 +206,7 @@ class AnimalMySQL extends BaseAnimalDB implements IAnimalDB {
         try {
             const {params, whereClause, orderBy} = getSearchQuery(searchOptions)
 
-            const [rows]: any = await this.connection.execute(
+            const [rows]: any = await this.client.execute(
                 `SELECT * FROM ${catsTableName} ${whereClause} ${orderBy}`,
                 params
             );

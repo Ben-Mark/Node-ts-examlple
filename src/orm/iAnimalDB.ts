@@ -19,7 +19,7 @@ export interface IAnimalDB {
     readAnimalDoc(id: string): Promise<ReadDBResponse>;
     updateAnimalDoc(updateOptions: UpdateOptions): Promise<UpdateDBResponse>;
     searchAnimalDoc(searchOptions: SearchOptions): Promise<SearchDBResponse>;
-
+    closeConnection(): Promise<void>;
 }
 
 
