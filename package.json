@@ -6,15 +6,11 @@
   "scripts": {
     "start-production": "NODE_ENV=production node dist/app.js",
     "start-win": "cmd /C \"cross-env NODE_ENV=production SYSTEM_UNDER_TEST=true node dist/app.js\"",
-
     "start-local": "cross-env NODE_ENV=dev ts-node-dev src/app.ts",
-
     "tests-production": "cross-env NODE_ENV=production SYSTEM_UNDER_TEST=true mocha --config=src/tests/setup/.mocharc.json",
     "tests-local": "cross-env NODE_ENV=dev SYSTEM_UNDER_TEST=true mocha --config=src/tests/setup/.mocharc.json",
-
     "docker-compose": "cross-env docker-compose --env-file .env.docker up -d --build",
     "docker-compose-test": "cross-env docker-compose --env-file .env.docker up --exit-code-from test test",
-
     "build": "tsc -b"
   },
   "author": "Ben Mark",
