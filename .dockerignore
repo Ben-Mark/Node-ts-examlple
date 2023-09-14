@@ -1,0 +1,10 @@
+# Exclude node_modules directory
+node_modules/
+
+# Exclude dist directory
+dist/
+
+# Exclude mocha_awesomereport directory
+mocha_awesomereport/
+
+test-results.properties
