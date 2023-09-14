@@ -4,29 +4,35 @@ import {IAnimal} from "../../orm/types";
 const {describe, it} = require('mocha');
 import { Context } from "mocha";
 
-import {createApp} from "../../app";
+import {createApp, terminate} from "../../app";
 
 
 function runTest(testName: string, dbType: string, port?: number) {
 
+    let app: any
 
-    describe(testName, function (this: Context) {
-
-        this.timeout(0)
-
-        process.env.DB_TYPE = dbType
-        let catId = ""
-        let app: any
-
-        it('Should wait until server is up', async function (this: Context) {
-            reportLog.call(this,'text message..')
+    before(async function() {
+        try{
+            console.log('Setting up resources before all tests run.');
             if(process.env.NODE_ENV === "dev"){
                 app = await createApp(port)
             }else{
                 app = await createApp()
             }
+        }catch(e){
+            console.error(e)
+        }
+    });
 
-        })
+
+    describe(testName, function (this: Context) {
+
+        console.log(`Starting test suite with DB_TYPE: ${dbType}`);
+        this.timeout(0)
+
+        process.env.DB_TYPE = dbType
+        let catId = ""
+
 
         it('Should receive 200 on server healthcheck', async function (this: Context) {
 
@@ -134,6 +140,17 @@ function runTest(testName: string, dbType: string, port?: number) {
 
 
     })
+
+
+
+    // after() is run once after all tests end.
+    after(function() {
+        console.log('Cleaning up resources after all tests have run.');
+        // Close
+        terminate()
+    })
+
+
 }
 
 describe('Test suite', function() {

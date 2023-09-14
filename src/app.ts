@@ -67,10 +67,15 @@ if(!isApiTestMode){
 
 
 const terminate = () => {
-    httpServer.close((err: any) => {
-        console.log('Http server terminated.');
-        process.exit(err ? 1 : 0);
-    });
+    try{
+        httpServer.close((err: any) => {
+            console.log('Http server terminated.');
+            process.exit(err ? 1 : 0);
+        });
+    }catch(e){
+        console.error(e)
+    }
+
 }
 
 export {

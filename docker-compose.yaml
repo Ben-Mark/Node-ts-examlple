@@ -4,11 +4,17 @@ services:
   animals-rest:
     build: .
     image: animals-rest:latest
+    environment:
+      - MONGO_DB_URI=mongodb://admin:admin@mongo:27017/animals
+      - MYSQL_DB_URI=mysql://admin:admin@mysql:3306/animals
     ports:
       - "3000:3000"
   test:
     image: animals-rest:latest
     command: npm run tests-production
+    environment:
+      - MONGO_DB_URI=mongodb://admin:admin@mongo:27017/animals
+      - MYSQL_DB_URI=mysql://admin:admin@mysql:3306/animals
     depends_on:
       - mongo
       - mysql

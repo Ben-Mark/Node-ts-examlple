@@ -13,7 +13,7 @@
     "tests-local": "cross-env NODE_ENV=dev SYSTEM_UNDER_TEST=true mocha --config=src/tests/setup/.mocharc.json",
 
     "docker-compose": "cross-env docker-compose up -d --build",
-    "docker-compose-test": "cross-env docker-compose up --build --exit-code-from test test",
+    "docker-compose-test": "cross-env docker-compose up --exit-code-from test test",
 
     "build": "tsc -b"
   },
