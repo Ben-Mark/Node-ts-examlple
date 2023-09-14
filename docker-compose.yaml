@@ -3,38 +3,36 @@ version: '3'
 services:
   animals-rest:
     build: .
-    image: animals-rest:latest
+    image: ${ANIMALS_IMAGE}
     environment:
-      - MONGO_DB_URI=mongodb://admin:admin@mongo:27017/animals
-      - MYSQL_DB_URI=mysql://admin:admin@mysql:3306/animals
+      - MONGO_DB_URI=${MONGO_DB_URI}
+      - MYSQL_DB_URI=${MYSQL_DB_URI}
     ports:
       - "3000:3000"
   test:
-    image: animals-rest:latest
+    image: ${ANIMALS_IMAGE}
     command: npm run tests-production
     environment:
-      - MONGO_DB_URI=mongodb://admin:admin@mongo:27017/animals
-      - MYSQL_DB_URI=mysql://admin:admin@mysql:3306/animals
+      - MONGO_DB_URI=${MONGO_DB_URI}
+      - MYSQL_DB_URI=${MYSQL_DB_URI}
     depends_on:
       - mongo
       - mysql
   mongo:
-    image: mongo
+    image: ${MONGO_IMAGE}
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
-      - MONGO_INITDB_DATABASE=animals
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     ports:
       - "27017:27017"
     command: mongod --bind_ip 0.0.0.0
-
   mysql:
-    image: mysql:8.0
+    image: ${MYSQL_IMAGE}
     environment:
-      - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=animals
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=admin
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
-
